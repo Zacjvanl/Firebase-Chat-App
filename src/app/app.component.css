@@ -25,7 +25,27 @@ input#message {
     min-width:200px;
 }
 
+.login-button {
+    background:#673ab7;
+    color:white;
+    padding: 1.2em;
+    width:300px;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+    text-align:center;
+    font-size:1.2em;
+    margin-bottom: 30px;
+    cursor:pointer;
+}
+
 img {
     display:block;
     margin-bottom:12px;
+}
+
+.chat_icon {
+    display:block;
+    margin-bottom:12px;
+    color: #673ab7;
 }

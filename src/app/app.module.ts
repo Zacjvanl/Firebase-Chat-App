@@ -2,6 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from "@angular/forms";
 import { AngularFireModule } from 'angularfire2';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
 
 import { AppComponent } from './app.component';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
@@ -23,6 +26,9 @@ export const firebaseConfig = {
   imports: [
     BrowserModule,
     FormsModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatButtonModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
     AngularFireAuthModule

@@ -1,11 +1,14 @@
-<div class="row columns">
-  <button (click)="login()" *ngIf="!(user | async)?.uid">Login with Google
+<mat-toolbar color="primary" role="heading">
+    <span><button mat-icon-button style="padding-right: 2em;"><mat-icon>menu</mat-icon></button>Firebase Chat App</span>
+</mat-toolbar>
+<div class="row columns" style="padding-top:5em;">
+  <button (click)="login()" *ngIf="!(user | async)?.uid" class="login-button">Login with Google
   </button>
-  <button (click)="logout()" *ngIf="(user | async)?.uid">Logout</button>
+  <button (click)="logout()" *ngIf="(user | async)?.uid" class="login-button">Logout</button>
 
   <input type="text" id="message" *ngIf="(user | async)?.uid" placeholder="What is it that you do?" (keyup.enter)="Send($event.target.value)" [(ngModel)]="msgVal" />
   <div id="details-container" *ngIf="(user | async)?.uid">
-      <p *ngFor="let item of items | async"><img src={{user.photoUrl}}>{{item.message}}</p>
+      <p *ngFor="let item of items | async"><mat-icon class="chat_icon">message</mat-icon>{{item.message}}</p>
   </div>
 </div>
 
