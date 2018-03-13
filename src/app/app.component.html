@@ -1,14 +1,17 @@
 <mat-toolbar color="primary" role="heading">
-    <span><button mat-icon-button style="padding-right: 2em;"><mat-icon>menu</mat-icon></button>Firebase Chat App</span>
+        <mat-menu #appMenu="matMenu"><button (click)="login()" *ngIf="!(user | async)?.uid" class="login-button">Login with Google
+        </button>
+        <button (click)="logout()" *ngIf="(user | async)?.uid" class="login-button">Logout</button>
+            </mat-menu>
+    <span><button mat-icon-button style="padding-right: 2em;" [matMenuTriggerFor]="appMenu"><mat-icon>menu</mat-icon></button>Firebase Chat App</span>
 </mat-toolbar>
-<div class="row columns" style="padding-top:5em;">
-  <button (click)="login()" *ngIf="!(user | async)?.uid" class="login-button">Login with Google
-  </button>
-  <button (click)="logout()" *ngIf="(user | async)?.uid" class="login-button">Logout</button>
+<div class="row columns" style="padding-top:2em;">
+    <div id="welcome-message" *ngIf="(user | async)?.uid">Welcome, {{(user | async).displayName}}</div>
 
-  <input type="text" id="message" *ngIf="(user | async)?.uid" placeholder="What is it that you do?" (keyup.enter)="Send($event.target.value)" [(ngModel)]="msgVal" />
-  <div id="details-container" *ngIf="(user | async)?.uid">
-      <p *ngFor="let item of items | async"><mat-icon class="chat_icon">message</mat-icon>{{item.message}}</p>
+  <div id="details-container" *ngIf="(user | async)?.uid" #cont>
+      <div *ngFor="let item of items | async"><span class="message-header"><img src="{{item.photo}}" class="message-image" *ngIf="item.photo != null"/><mat-icon class="chat_icon" *ngIf="item.photo == null">message</mat-icon><span style="padding-top:0.3em;">{{item.from}}</span></span>{{item.message}}</div>
   </div>
+  
+  <input type="text" id="message" *ngIf="(user | async)?.uid" placeholder="Start chatting!" (keyup.enter)="Send($event.target.value);" [(ngModel)]="msgVal"/>
 </div>
 
