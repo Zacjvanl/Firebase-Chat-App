@@ -16,7 +16,11 @@ export class AppComponent implements OnInit {
   itemsRef: AngularFireList<any>;
   items: Observable<any[]>;
   msgVal: string = '';
-  @ViewChild('cont') cont : ElementRef;
+  contentPlaceHolder? : ElementRef;
+  @ViewChild('cont') set content(content : ElementRef) {
+    this.contentPlaceHolder = content
+    this.scrollElement()
+  }
 
   constructor(public af: AngularFireDatabase, private userSession : LoginService) {
     this.itemsRef = af.list('/messages', ref => {
@@ -42,8 +46,13 @@ export class AppComponent implements OnInit {
   }
 
 public scrollElement() {
-  this.cont.nativeElement.scrollTo(0, this.cont.nativeElement.scrollHeight);
-}
+  if(this.contentPlaceHolder) {
+    this.contentPlaceHolder.nativeElement.scrollTo(0, this.contentPlaceHolder.nativeElement.scrollHeight);
+  }
+  else {
+    console.log("ERR: Item Container isn't loaded.")
+  }
+  }
 
 Send(desc: string) {
   this.itemsRef.push({ message: desc, 
