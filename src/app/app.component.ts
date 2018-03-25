@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import { LoginService } from './login.service';
+import { ChatService } from './chat.service';
 
 
 @Component({
@@ -13,7 +13,6 @@ import { LoginService } from './login.service';
 export class AppComponent implements OnInit {
   
   user: Observable<any>;
-  itemsRef: AngularFireList<any>;
   items: Observable<any[]>;
   msgVal: string = '';
   contentPlaceHolder? : ElementRef;
@@ -22,15 +21,11 @@ export class AppComponent implements OnInit {
     this.scrollElement()
   }
 
-  constructor(public af: AngularFireDatabase, private userSession : LoginService) {
-    this.itemsRef = af.list('/messages', ref => {
-      return ref.limitToLast(50)
-    });
-
-    this.items = this.itemsRef.valueChanges();
-    this.items.delay(50).subscribe(test => {
+  constructor(private userSession : LoginService, private chatService : ChatService) {
+    this.items = this.chatService.itemsRef.valueChanges();
+    this.items.delay(50).subscribe(run => {
       this.scrollElement();
-    })
+    });
   }
   
   ngOnInit() {
@@ -54,11 +49,7 @@ public scrollElement() {
   }
   }
 
-Send(desc: string) {
-  this.itemsRef.push({ message: desc, 
-    from: this.userSession.userInfo.displayName, 
-    photo: this.userSession.userInfo.photoURL,
-    email: this.userSession.userInfo.email });
-  this.msgVal = '';
-}
+  Send(msg : string){
+    this.chatService.Send(msg);
+  }
 }
