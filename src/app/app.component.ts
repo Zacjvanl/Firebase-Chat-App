@@ -15,10 +15,12 @@ export class AppComponent implements OnInit {
   user: Observable<any>;
   items: Observable<any[]>;
   msgVal: string = '';
+  LoggedIn : Boolean = false;
   contentPlaceHolder? : ElementRef;
   @ViewChild('cont') set content(content : ElementRef) {
     this.contentPlaceHolder = content
     this.scrollElement()
+    this.LoggedIn = this.userSession.LoggedIn
   }
 
   constructor(private userSession : LoginService, private chatService : ChatService) {

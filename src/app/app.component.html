@@ -9,7 +9,7 @@
     <div id="welcome-message" *ngIf="(user | async)?.uid">Welcome, {{(user | async).displayName}}</div>
 
   <div id="details-container" *ngIf="(user | async)?.uid" #cont>
-      <div *ngFor="let item of items | async"><span class="message-header"><img src="{{item.photo}}" class="message-image" *ngIf="item.photo != null"/><mat-icon class="chat_icon" *ngIf="item.photo == null">message</mat-icon><span style="padding-top:0.3em;">{{item.from}}</span></span>{{item.message}}</div>
+      <div *ngFor="let item of items | async"><span class="message-header"><img src="{{item.photo}}" class="message-image" *ngIf="item.photo != null"/><mat-icon class="chat_icon" *ngIf="item.photo == null">message</mat-icon><span style="padding-top:0.3em;">{{item.from}}</span><span style="color:chartreuse" *ngIf="LoggedIn">Online</span></span>{{item.message}}</div>
   </div>
   
   <input type="text" id="message" *ngIf="(user | async)?.uid" placeholder="Start chatting!" (keyup.enter)="Send($event.target.value);" [(ngModel)]="chatService.msgVal"/>
