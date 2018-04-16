@@ -6,10 +6,19 @@
     <span><button mat-icon-button style="padding-right: 2em;" [matMenuTriggerFor]="appMenu"><mat-icon>menu</mat-icon></button>Firebase Chat App</span>
 </mat-toolbar>
 <div class="row columns" style="padding-top:2em;">
-    <div id="welcome-message" *ngIf="(user | async)?.uid">Welcome, {{(user | async).displayName}}</div>
+    <div id="welcome-message" *ngIf="(user | async)?.uid">Welcome, {{(user | async)?.displayName}}</div>
 
   <div id="details-container" *ngIf="(user | async)?.uid" #cont>
-      <div *ngFor="let item of items | async"><span class="message-header"><img src="{{item.photo}}" class="message-image" *ngIf="item.photo != null"/><mat-icon class="chat_icon" *ngIf="item.photo == null">message</mat-icon><span style="padding-top:0.3em;">{{item.from}}</span><span style="color:chartreuse" *ngIf="LoggedIn">Online</span></span>{{item.message}}</div>
+      <div *ngFor="let item of items | async">
+        <span class="message-header">
+            <img src="{{item.photo}}" class="message-image" *ngIf="item.photo != null"/>
+            <mat-icon class="chat_icon" *ngIf="item.photo == null">message</mat-icon>
+            <span style="padding-top:0.3em;">{{item.from}}</span>
+            <span style="color:chartreuse; padding-left: 1.2em; font-size: 1.2em;" 
+            *ngIf="(item.info | async) == 'online'">{{(item.info | async)}}</span>
+            <span style="color:rgb(187, 39, 13); padding-left: 1.2em; font-size: 1.2em;" 
+            *ngIf="(item.info | async) != 'online'">{{(item.info | async)}}</span>
+        </span>{{item.message}}</div>
   </div>
   
   <input type="text" id="message" *ngIf="(user | async)?.uid" placeholder="Start chatting!" (keyup.enter)="Send($event.target.value);" [(ngModel)]="chatService.msgVal"/>

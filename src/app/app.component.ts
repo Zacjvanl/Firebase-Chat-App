@@ -20,26 +20,32 @@ export class AppComponent implements OnInit {
   @ViewChild('cont') set content(content : ElementRef) {
     this.contentPlaceHolder = content
     this.scrollElement()
-    this.LoggedIn = this.userSession.LoggedIn
   }
 
-  constructor(private userSession : LoginService, private chatService : ChatService) {
-    this.items = this.chatService.itemsRef.valueChanges();
+  constructor(private loginService : LoginService, private chatService : ChatService) {
+    this.items = this.chatService.itemsRef.valueChanges()
+    .map(messages => {
+      messages.map(m => {
+        m.info = this.chatService.af.list('presence/' + m.uid,
+                  ref => { return ref.limitToFirst(1)}).valueChanges();
+      });
+      return messages;
+    });
     this.items.delay(50).subscribe(run => {
       this.scrollElement();
     });
   }
   
   ngOnInit() {
-    this.user = this.userSession.user;
+    this.user = this.loginService.user;
   }
 
   logout() {
-    this.userSession.logout();
+    this.loginService.logout();
   }
 
   login() {
-    this.userSession.login();
+    this.loginService.login();
   }
 
 public scrollElement() {

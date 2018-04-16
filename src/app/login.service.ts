@@ -23,12 +23,21 @@ export class LoginService {
   
     this.user.subscribe(info => {
       if(info){
-        this.updateOnConnected()
-        this.updateOnDisconnected()
         this.userInfo.displayName = info.displayName; 
         this.userInfo.email = info.email;
         this.userInfo.photoURL = info.providerData[0].photoURL;
         this.userInfo.uid = info.uid;
+
+        this.updateOnConnected()
+        this.updateOnDisconnected()
+        //This is done because when the user logs out and logs back in
+        //there connection to the database is unchanged
+        //so you need to manually update their status by making
+        //this function call.
+        this.updateStatus('online');
+      }
+      else {
+        this.updateStatus('offline');
       }
     })
   }
@@ -43,14 +52,13 @@ export class LoginService {
 
   private updateStatus(status : string) {
     if (!this.userInfo.uid) return
-
+    
     this.af.object("/presence/" + this.userInfo.uid).update({status : status})
   }
 
   private updateOnConnected() {
     return this.amOnline.subscribe(connected => {
       let status = connected ? "online" : "offline"
-      this.LoggedIn = connected ? true : false
       this.updateStatus(status)
     })
   }
